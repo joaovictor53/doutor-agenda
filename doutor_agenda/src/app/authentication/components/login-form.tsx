@@ -12,6 +12,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  // Form, // Se você tem um componente <Form> customizado, pode usá-lo, senão a tag <form> nativa.
+  // No seu caso, você está usando o <form> nativo, o que é bom.
+  // Os componentes abaixo (FormControl, FormField, etc.) são os que precisam do contexto.
   FormControl,
   FormField,
   FormItem,
@@ -20,8 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const registerSchema = z.object({
-  name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
+const loginSchema = z.object({
   email: z.string().trim().min(1, { message: "Email inválido" }).email(),
   password: z
     .string()
@@ -29,48 +31,33 @@ const registerSchema = z.object({
     .min(8, { message: "Senha deve ter pelo menos 8 caracteres" }),
 });
 
-// Pequena sugestão: o nome comum para formulário de cadastro é "SignUpForm" (com 'Up')
-// Mas vou manter "SingUpForm" como você usou para consistência com seu código.
-const SignUpForm = () => {
-  const form = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
+const LoginForm = () => {
+  const form = useForm<z.infer<typeof loginSchema>>({
+    // 'form' aqui contém todos os métodos e estado
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerSchema>) {
+  function onSubmit(values: z.infer<typeof loginSchema>) {
     console.log(values);
   }
 
   return (
-    // 2. Envolva o Card com FormProvider e passe o 'form' (que contém os métodos do useForm)
+    // 2. Envolva o seu <form> (ou o conteúdo dele) com FormProvider
+    // e passe todas as propriedades de 'form' para ele.
     <FormProvider {...form}>
       <Card>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <CardHeader>
-            <CardTitle>Criar Conta</CardTitle>
-            <CardDescription>Crie uma conta para continuar</CardDescription>
+            <CardTitle>Faça login</CardTitle>
+            <CardDescription>Faça login para continuar</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <FormField
-              control={form.control} // 'control' ainda é passado aqui
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>{" "}
-                  {/* Agora terá acesso ao contexto */}
-                  <FormControl>
-                    <Input placeholder="Digite seu nome" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
+              control={form.control} // 'control' ainda é necessário aqui para FormField
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -92,8 +79,8 @@ const SignUpForm = () => {
                   {/* Agora terá acesso ao contexto */}
                   <FormControl>
                     <Input
+                      type="password" // Adicionado para o campo de senha
                       placeholder="Digite sua senha"
-                      type="password"
                       {...field}
                     />
                   </FormControl>
@@ -104,7 +91,7 @@ const SignUpForm = () => {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              Criar Conta
+              Entrar
             </Button>
           </CardFooter>
         </form>
@@ -113,4 +100,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;
