@@ -1,5 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form"; // 1. Importe FormProvider
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -12,9 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  // Form, // Se você tem um componente <Form> customizado, pode usá-lo, senão a tag <form> nativa.
-  // No seu caso, você está usando o <form> nativo, o que é bom.
-  // Os componentes abaixo (FormControl, FormField, etc.) são os que precisam do contexto.
   FormControl,
   FormField,
   FormItem,
@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z.string().trim().min(1, { message: "Email inválido" }).email(),
@@ -32,6 +33,7 @@ const loginSchema = z.object({
 });
 
 const LoginForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginSchema>>({
     // 'form' aqui contém todos os métodos e estado
     resolver: zodResolver(loginSchema),
@@ -41,8 +43,22 @@ const LoginForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/dashboard");
+          toast.success("Login realizado com sucesso.");
+        },
+        onError: () => {
+          toast.error("Email ou senha inválidos.");
+        },
+      },
+    );
   }
 
   return (
@@ -90,8 +106,16 @@ const LoginForm = () => {
             />
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full">
-              Entrar
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Entrar"
+              )}
             </Button>
           </CardFooter>
         </form>

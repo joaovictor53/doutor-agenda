@@ -135,6 +135,3 @@ const SignUpForm = () => {
   );
 };
 export default SignUpForm;
-function onSuccess() {
-  throw new Error("Function not implemented.");
-}
