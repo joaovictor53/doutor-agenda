@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 
-export const SignOutButton = () => {
+const SignOutButton = () => {
   const router = useRouter();
   return (
     <Button
@@ -23,3 +23,5 @@ export const SignOutButton = () => {
     </Button>
   );
 };
+
+export default SignOutButton;
