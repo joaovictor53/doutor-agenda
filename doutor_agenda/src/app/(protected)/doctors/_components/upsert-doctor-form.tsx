@@ -184,7 +184,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               </FormItem>
             )}
           />
-          <FormField //dia inicial de disponibilidade
+          <FormField
             control={form.control}
             name="availableFromWeekDay"
             render={({ field }) => (
@@ -213,7 +213,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               </FormItem>
             )}
           />
-          <FormField //dia final de disponibilidade
+          <FormField
             control={form.control}
             name="availableToWeekDay"
             render={({ field }) => (
@@ -242,7 +242,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               </FormItem>
             )}
           />
-          <FormField //hora inicial de disponibilidade
+          <FormField
             control={form.control}
             name="availableFromTime"
             render={({ field }) => (
@@ -311,7 +311,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
               </FormItem>
             )}
           />
-          <FormField //hora final de disponibilidade
+          <FormField
             control={form.control}
             name="availableToTime"
             render={({ field }) => (

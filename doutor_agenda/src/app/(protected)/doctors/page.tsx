@@ -22,7 +22,7 @@ const DoctorsPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session) {
+  if (!session?.user) {
     redirect("/authentication");
   }
   if (!session.user.clinic) {
@@ -36,9 +36,7 @@ const DoctorsPage = async () => {
       <PageHeader>
         <PageHeaderContent>
           <PageTitle>Médicos</PageTitle>
-          <PageDescription>
-            Gerencie os médicos cadastrados no sistema
-          </PageDescription>
+          <PageDescription>Gerencie os médicos da sua clínica</PageDescription>
         </PageHeaderContent>
         <PageActions>
           <AddDoctorButton />
