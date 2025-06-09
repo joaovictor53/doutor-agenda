@@ -19,6 +19,7 @@ import AppointmentsChart from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-picker";
 import StatsCards from "./_components/stats-cards";
 import TopDoctors from "./_components/top-doctors";
+import TopSpecialties from "./_components/top-specialties";
 
 interface DashBoardPageProps {
   searchParams: Promise<{
@@ -49,6 +50,7 @@ const DashboardPage = async ({ searchParams }: DashBoardPageProps) => {
     [totalPatients],
     [totalDoctors],
     [topDoctors],
+    [topSpecialties],
   ] = await Promise.all([
     db
       .select({
@@ -123,6 +125,30 @@ const DashboardPage = async ({ searchParams }: DashBoardPageProps) => {
       .groupBy(doctorsTable.id)
       .orderBy(desc(count(appointmentsTable.id)))
       .limit(10),
+    db
+      .select({
+        specialty: doctorsTable.specialty,
+        appointments: count(appointmentsTable.id),
+      })
+      .from(doctorsTable)
+      .leftJoin(
+        appointmentsTable,
+        and(
+          eq(appointmentsTable.doctorId, doctorsTable.id),
+          gte(appointmentsTable.date, new Date(from)),
+          lte(appointmentsTable.date, new Date(to)),
+        ),
+      )
+      .where(
+        and(
+          eq(doctorsTable.clinicId, session.user.clinic.id),
+          gte(appointmentsTable.date, new Date(from)),
+          lte(appointmentsTable.date, new Date(to)),
+        ),
+      )
+      .groupBy(doctorsTable.specialty)
+      .orderBy(desc(count(appointmentsTable.id)))
+      .limit(10),
   ]);
 
   const chartStatsDate = dayjs().subtract(10, "days").startOf("day").toDate();
@@ -146,6 +172,7 @@ const DashboardPage = async ({ searchParams }: DashBoardPageProps) => {
     )
     .groupBy(sql<string>`DATE(${appointmentsTable.date})`)
     .orderBy(sql<string>`DATE(${appointmentsTable.date})`);
+
   return (
     <PageContainer>
       <PageHeader>
@@ -168,6 +195,7 @@ const DashboardPage = async ({ searchParams }: DashBoardPageProps) => {
       <div className="grid grid-cols-[2.25fr_1fr] gap-4">
         <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
         <TopDoctors doctors={topDoctors} />
+        <TopSpecialties topSpecialties={topSpecialties} />
       </div>
     </PageContainer>
   );
