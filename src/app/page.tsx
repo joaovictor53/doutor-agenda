@@ -24,7 +24,7 @@ export default function Home() {
                 Clínica online - tudo em um só lugar.
               </p>
               <div className="flex flex-col gap-3 pt-4 sm:flex-row">
-                <Link href="/register">
+                <Link href="/authentication">
                   <Button
                     size="lg"
                     className="bg-background text-foreground hover:bg-background/90"
@@ -32,7 +32,7 @@ export default function Home() {
                     Cadastre-se Agora
                   </Button>
                 </Link>
-                <Link href="/login">
+                <Link href="/authentication">
                   <Button
                     size="lg"
                     variant="outline"
