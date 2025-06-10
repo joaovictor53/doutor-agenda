@@ -148,6 +148,10 @@ const LoginForm = () => {
                 </svg>
                 Entrar com Google
               </Button>
+              <div className="text-foreground mt-4 text-center text-xs">
+                Para demonstração: use &quot;clinic@example.com&quot;, com a
+                senha &quot;password&quot;
+              </div>
             </div>
           </CardFooter>
         </form>

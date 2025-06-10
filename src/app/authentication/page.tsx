@@ -1,33 +1,34 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { Stethoscope } from "lucide-react";
+import React from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { auth } from "@/lib/auth";
 
 import LoginForm from "./components/login-form";
 import SignUpForm from "./components/sign-up-form";
 
-const AuthenticationPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session?.user) {
-    redirect("/dashboard");
-  }
+const AuthenticationPage = () => {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <Tabs defaultValue="login" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="login">Login</TabsTrigger>
-          <TabsTrigger value="register">Criar conta</TabsTrigger>
-        </TabsList>
-        <TabsContent value="login">
-          <LoginForm />
-        </TabsContent>
-        <TabsContent value="register">
-          <SignUpForm />
-        </TabsContent>
-      </Tabs>
+    <div className="flex min-h-screen flex-col justify-center bg-gray-50 py-12 dark:bg-gray-900">
+      <div className="mb-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+          <Stethoscope className="text-primary mr-2 h-8 w-8" />
+          <span className="text-2xl font-bold">Doutor Agenda</span>
+        </div>
+      </div>
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Entrar</TabsTrigger>
+            <TabsTrigger value="register">Cadastrar</TabsTrigger>
+          </TabsList>
+          <TabsContent value="login" className="mt-6">
+            <LoginForm />
+          </TabsContent>
+          <TabsContent value="register" className="mt-6">
+            <SignUpForm />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };
