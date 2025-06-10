@@ -1,7 +1,8 @@
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 import { AppSidebar } from "./_components/app-sidebar";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
